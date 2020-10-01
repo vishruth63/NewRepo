@@ -1,0 +1,593 @@
+1. Count the triplets 
+Given an array of distinct integers. The task is to count all the triplets such that sum of two elements equals the third element.
+
+{
+    int n ; 
+    cin>>n;
+    vector<int> arr; 
+    int sum = 0 ;
+    unordered_map <int,int> mp ;
+    for ( int i = 0 ; i < n ; i++ )
+    {
+        int num ;
+        cin >> num ;
+        arr.push_back (num) ;
+        mp[num]++ ;
+    }
+    sort (arr.begin(), arr.begin() + n) ;
+    for ( int i = 0 ; i < n-1 ; i++ )
+    {
+        for ( int j = i+1 ; j < n ; j++ )
+        {
+            sum = arr[i]+arr[j] ;
+            if ( mp[sum] != 0)
+                cout<<arr[i]<<"+"<<arr[j]<<"="<<arr[i]+arr[j]<<endl;
+        }
+    }
+}
+
+______________________________________________________________________________
+
+2. Maximum subarray sum (KADANE'S ALGORITHM)
+Given an array arr of N integers. Find the contiguous sub-array with maximum sum.
+
+{
+    vector<int> arr = {1,2,3,-2,5} ;
+    vector<int> sum ;
+    pair<int, int> min ;
+    min = make_pair(1,0) ;
+    pair<int, int> max ;
+    max = make_pair(1,0) ;
+    // cout<<max.first<<" "<<max.second;
+    int i = 1;
+    sum.push_back(arr[0]) ;
+    int size = sizeof(arr)/sizeof(int) ;
+    while ( i != size-1 )
+    {
+        //update in sum array 
+        sum.push_back (sum[i-1]+arr[i]) ;
+        cout<<sum[i]<<" ";    
+        //check for minimum sum so far 
+        if ( sum[i] < min.first )
+            min = make_pair (sum[i], i) ;
+
+        //check for max element 
+        if ( sum[i] > max.first )
+            max = make_pair (sum[i], i) ;
+        i++ ;
+    }
+    cout<<max.second<<" "<<min.second ;
+}
+
+______________________________________________________________________________
+
+3. Find missing number. Given an Array of intergers ranging from 1 to N, find the missing number 
+
+Note: We can do this using the total sum of first n natural numbers - sum of the array but that is the trick of this question. If "N" is too large, that will cause memory flow and hence n(n+1)/2 wont lie in the range of long long int. Therefore we will make use of BITWISE XOR 
+
+int getMissingNo(int a[], int n) 
+{ 
+    // For xor of all the elements in array 
+    int x1 = a[0]; 
+  
+    // For xor of all the elements from 1 to n+1 
+    int x2 = 1; 
+  
+    for (int i = 1; i < n; i++) 
+        x1 = x1 ^ a[i]; 
+  
+    for (int i = 2; i <= n + 1; i++) 
+        x2 = x2 ^ i; 
+  
+    return (x1 ^ x2); 
+} 
+
+______________________________________________________________________________
+
+4. Given two sorted arrays arr1[] and arr2[] in non-decreasing order with size n and m. The task is to merge the two sorted arrays into one sorted array (in non-decreasing order).
+
+Note: Expected time complexity is O((n+m) log(n+m)). DO NOT use extra space.  We need to modify existing arrays as following.
+
+Look up the answer on GeeksForGeeks, It's complete memorization of algorithm. 
+_____________________________________________________________________________
+
+5. Inversion Count for an array indicates – how far (or close) the array is from being sorted. If array is already sorted then inversion count is 0. If array is sorted in reverse order that inversion count is the maximum. 
+Formally speaking, two elements a[i] and a[j] form an inversion if a[i] > a[j] and i < j
+
+int getInvCount() 
+{ 
+    // Create an empty set and insert first element in it 
+    vector<int> arr = {3,2,5,4,1} ;
+    int n = 5 ;
+    multiset<int> set1; 
+    set1.insert(arr[0]); 
+    int invcount = 0; // Initialize result 
+    multiset<int>::iterator itset1; // Iterator for the set 
+    for (int i=1; i<n; i++) 
+    { 
+        set1.insert(arr[i]); 
+        itset1 = set1.upper_bound(arr[i]); 
+        invcount += distance(itset1, set1.end()); 
+    } 
+    return invcount; 
+} 
+_____________________________________________________________________________
+
+6. To check whether the number is a power of 2 or not 
+
+void Power () 
+{
+    int num ; 
+    cin >> num ;
+    if ( num == 1 )
+        cout<<"YES" ;
+    int sol ; 
+    sol = ( num & (num-1) ) ;
+    if ( ! sol )
+        cout<<"YES"<<endl ;
+    else 
+        cout<<"NO";
+}
+_____________________________________________________________________________
+
+7. Find the First Set bit of a number 
+
+void FirstSetBit () 
+{
+    int num ;
+    cin >> num ;
+    int count = 0;
+    int bit ;
+    for ( int i = 0 ; i < 4 ; i++ )
+    {
+        int val = pow (2,i) ;
+        bit = (val & num) ; //always put the brackets else the 
+                            // equals operation has the higher precendence
+        // cout<<bit<<" "<<val<<endl;
+        if ( bit == val )
+        {
+            count = i ;
+            break ;
+        }
+    }
+    cout<<count ;
+}
+_____________________________________________________________________________
+
+8. Find number of pairs (x, y) in an array such that x^y > y^x
+
+Watch the video solution of geeksforgeeks. It's very basic but mostly learning thing. Can definitely be apploed in other questions.
+_____________________________________________________________________________
+
+9. Nearest Greatest Element 
+
+void NGL (vector<int> arr, int size)
+{
+    stack <int> s ;
+    vector<int> res ;
+    s.push (arr[size-1]) ;
+    res.push_back(-1) ;
+    // int i = size - 2 ;
+    for ( int i = size-2 ; i >= 0 ; i-- )    // iterating the entire array 
+    {
+        while ( arr[i] > s.top() )
+        {
+            if ( s.empty() )
+            {
+                res.push_back (-1) ;
+                continue ;
+            }
+            s.pop() ;
+        }
+        res.push_back (s.top()) ;
+        s.push(arr[i]) ;
+        i-- ;
+    }
+    for ( auto itr = res.end()-1 ; itr >= res.begin() ; itr-- )
+        cout<<*itr<<" ";
+}
+
+Also check out Aditya Verma playlist on YouTube ( Discussed the various variations of Stack )
+_____________________________________________________________________________
+
+10. Given that integers are being read from a data stream. Find median of all the elements read so far starting from the first integer till the last integer.
+NOTE: The question can be solved using Sorting the array every time we input the array, the complexity will be still be the same but using Heap is more intutive.
+
+void printMedians(double arr[], int n) 
+{ 
+    // max heap to store the smaller half elements 
+    priority_queue<double> s; 
+    // min heap to store the greater half elements 
+    priority_queue<double,vector<double>,greater<double> > g; 
+    double med = arr[0]; 
+    s.push(arr[0]); 
+    cout << med << endl; 
+    // reading elements of stream one by one 
+    /*  At any time we try to make heaps balanced and 
+        their sizes differ by at-most 1. If heaps are 
+        balanced,then we declare median as average of 
+        min_heap_right.top() and max_heap_left.top() 
+        If heaps are unbalanced,then median is defined 
+        as the top element of heap of larger size  */
+    for (int i=1; i < n; i++) 
+    { 
+        double x = arr[i]; 
+        // case1(left side heap has more elements) 
+        if (s.size() > g.size()) 
+        { 
+            if (x < med) 
+            { 
+                g.push(s.top()); 
+                s.pop(); 
+                s.push(x); 
+            } 
+            else
+                g.push(x); 
+            med = (s.top() + g.top())/2.0; 
+        } 
+        // case2(both heaps are balanced) 
+        else if (s.size()==g.size()) 
+        { 
+            if (x < med) 
+            { 
+                s.push(x); 
+                med = (double)s.top(); 
+            } 
+            else
+            { 
+                g.push(x); 
+                med = (double)g.top(); 
+            } 
+        } 
+        // case3(right side heap has more elements) 
+        else
+        { 
+            if (x > med) 
+            { 
+                s.push(g.top()); 
+                g.pop(); 
+                g.push(x); 
+            } 
+            else
+                s.push(x); 
+            med = (s.top() + g.top())/2.0; 
+        } 
+        cout << med << endl; 
+    } 
+} 
+_____________________________________________________________________________
+
+11. Remove duplicate characters from the string 
+
+void removeDuplicates(string s,int n){  // n = size 
+  unordered_map<char,int> exists; 
+  int index = 0;  
+  for(int i=0;i<n;i++){ 
+    if(exists[s[i]]==0) 
+    { 
+      s[index++] = s[i]; 
+      exists[s[i]]++; 
+    } 
+  } 
+  cout<<s; 
+}
+
+OR
+/* VERY IMPORTANT SOLUTION */
+
+    bool present[256] = {false};
+	int n = strlen(str);  // str is input string
+	for (int i=0; i < n; i++) present[str[i]] = true;  
+
+	/* In place removal of duplicate characters*/
+	for (int i=0; i < n; i++)
+    {
+        if (present[str[i]] == true)
+        {
+            str[res_ind] = str[i];
+            res_ind++;
+            present[str[i]] = false;
+        }
+    }
+_____________________________________________________________________________
+
+12. Reverse a stack using recursion 
+
+char insert_at_bottom(char x) 
+{ 
+  
+    if(st.size() == 0) 
+    st.push(x); 
+  
+    else
+    { 
+              
+        char a = st.top(); 
+        st.pop(); 
+        insert_at_bottom(x); 
+
+        st.push(a); 
+    } 
+} 
+
+char reverse() 
+{ 
+    if(st.size()>0) 
+    { 
+          
+        char x = st.top(); 
+        st.pop(); 
+        reverse(); 
+
+        insert_at_bottom(x); 
+    } 
+} 
+_____________________________________________________________________________
+
+13. CREATE BINARY TREE
+
+class TreeNode
+{
+public: 
+    int data ;
+    TreeNode* left ;
+    TreeNode* right ;
+    TreeNode (int data) 
+    {
+        this->data = data ;
+        left = NULL ;
+        right = NULL ;
+    }
+    void print ()
+    {
+        cout<<data<<endl;
+        cout<<left<<" ";
+        cout<<right;
+    }
+};
+
+void caller ()
+{
+    TreeNode* root ;
+    // TreeNode* ri ; 
+    root = new TreeNode (1) ;
+    // ri = new TreeNode (2) ;
+    root -> right = new TreeNode (2) ; 
+    (root->right)->print() ;
+    cout<<endl;
+    // cout<<&(*ri) ;
+}
+_____________________________________________________________________________
+
+14. Given an array nums , move all the '0's to the end of it while maintaining the relative order of non-zero elements.
+
+The solution is O(N) and is O(1) space. This involves counting the '0's and 
+inserting the elements in the same array. Once our first iteration is over, 
+we simply push back the zeros which we counted earlier. Look the code for 
+more clearity. 
+
+void solution ()
+{
+	vector<int> nums = {0,3,0,12,15,0} ;
+    	int size = nums.size() ;
+    	int pos = 0 ; 
+    	for ( int i = 0 ; i < size ; i++) 
+    	{
+        	if ( nums[i] )
+            	nums[pos++] = nums[i] ;
+    }
+    for ( int i = pos ; i < size - 1 ; i++ )
+        nums[i] = 0 ;
+}
+_____________________________________________________________________________
+
+15. String shifting. A string is shifted either to right ( denoted by 0 ) or left (denoted by 1) along with the amount. We have to determine the resultant string. 
+
+void stringshift () 
+{
+    int n ;
+    cin >> n ;
+    vector<pair<int,int> > nums ;
+    string str ;
+    cin >> str ;
+    for ( int i= 0 ; i < n ; i++ )
+    {
+        int val1 , val2; 
+        cin >> val1 >> val2 ;
+        nums.push_back(make_pair(val1,val2)) ;
+    }
+    int total = 0 ;
+    for ( auto ele : nums ) 
+    {
+        if ( ele.first == 0 )
+            total += ele.second ;
+        else 
+            total -= ele.second ;
+    }
+    if ( total == 0 )
+        cout<<str ;
+    if ( total > 0 )    
+    {
+        str = str.substr(0+total+1 , str.length() ) + str.substr (0, 0+total+1) ;
+        cout<<str<<endl; 
+    }
+    else 
+    {    
+        total += str.length() ;
+        str = str.substr(0+total+1 , str.length() ) + str.substr (0, 0+total+1) ;
+        cout<<str<<endl; 
+    }
+}
+_____________________________________________________________________________
+
+16. Finding duplicate in an Array in O(N) time and O(1) space (Learn the method) asked in Google [refer to Nick White's video]
+
+void duplicate ()
+{
+    vector<int> nums = {1,2,1,3,4,2,5} ;
+    vector<int> ans ; 
+    int index = 0 ;
+    int start = 0 ;
+    for ( int i = 0 ; i < nums.size() ; i++ )
+    {
+        index = nums[i] - 1; 
+        if ( nums[index] < 0)
+        {
+            ans.push_back (index+1) ;
+            continue ;
+        }
+        nums[index] = -nums[index] ;
+    }    
+    for ( auto ele : ans ) 
+        cout<<ele<<endl;
+}
+_____________________________________________________________________________
+
+17. Overlapping time slots. Given the pair of array 
+input: [1,5] , [4,6 ] , [7,10] , [11, 15] , [14,20] 
+output: [1,6], [7,10], [11,20] 
+If the time slot overlaps with the previous time range then extend that time range. Can be asked in questions where a work has to be done by two people but if the time slot overlaps then you have to continue doing the work. 
+
+Note : My solution is O(N) which is highly optimised. Using heaps to sort it in O(logN) and traversing the array only once. This question has been asked in Google CodeJam 2020 (Problem C). Also same type of question is available on LeetCode 
+
+// The solution I have written needs slightly debugging else the concept works perfectly fine. 
+
+void overlappingTimeSlots () 
+{
+    priority_queue<pair<int, int> > heap ;
+    vector<pair<int, int > > ans ; 
+    int n = 5 ;
+    for ( int i = 0 ; i < n ; i++ )
+    {
+        int num1 , num2 ;
+        cin >> num1 >> num2 ; 
+        heap.push (make_pair (num1, num2)) ;
+    }
+
+    //compare the top and second element of heap. Run till heap size != 0 
+    // push the resultant values in a vector
+    while ( heap.size() > 0 )
+    {
+        pair<int ,int > up1 ;
+        pair<int ,int > up2 ; 
+        up1 = heap.top() ;
+        heap.pop() ;
+        if ( heap.size() == 0 ) 
+            ans.push_back (up1) ;
+        up2 = heap.top() ;
+        heap.pop() ;
+        if ( up1.first > up2.second )
+        {
+            ans.push_back (up1) ;
+            // heap.pop() ;
+            continue ;
+        }
+        if ( up1.first <= up2.second )
+        {
+            up2.second = up1.second;
+            heap.push (up2) ;
+        }
+    }
+    for ( auto ele : ans )
+        cout<<ele.first<<":"<<ele.second<<endl;
+}
+_____________________________________________________________________________
+
+18. Given two array integers a and b and a value such that (element from a + element from b) = value. Or in other words a[i]+b[j] = val 
+Note: use unordered_set and look up that element (O(1) lookup time) 
+
+void SumOfTwo () 
+{
+    vector<int> v1 = { 1,2,3, -8} ;
+    vector<int> v2 = {10,20,30,40,50} ;
+    vector<pair<int , int > > ans ;
+    unordered_set<int> s1; 
+    unordered_set<int> s2; 
+    int val = 42 ;
+    for ( int ele : v1 )
+        s1.insert(ele) ;
+    // for ( int ele : v2 )
+    //     s2.insert(ele) ;
+    for ( int ele: v2 )
+    {
+        if ( s1.count (val-ele) == 1 )
+            ans.push_back (make_pair (ele, val-ele)) ;
+    }
+    for ( auto ele : ans )
+        cout<<ele.first<<" : "<<ele.second<<endl;
+}
+_____________________________________________________________________________
+
+19. Length of the longest subarray with the given sum.
+Note: The elemnts are non-negative that's why we have used sliding window technique which wont work othervise for negative elements.
+
+void caller () 
+{
+    vector<int> nums = {1,2,3,4,5,0,0,0,4,3} ;
+    int start = 0 ;
+    int val = 15 ;
+    int temp = nums[0] ;
+    int res = 0;
+    for ( int i=1 ; i< nums.size() ; i++ )
+    {
+        temp += nums[i] ;
+        if ( temp >= val)
+        {
+            if ( temp == val ) 
+            {
+                res = max (res, i-start+1) ;
+                continue; 
+            }
+            temp -= nums[start++] ;   
+        }
+    }
+    cout<<res<<endl;
+}
+_____________________________________________________________________________
+
+20. "Moroes Voting Algorithm" to find the majority element (if it exists), otherwise prints “No Majority Element”. A majority element in an array A[] of size n is an element that appears more than n/2 times (and hence there is at most one such element).
+
+First we find the contender of being the majority element. Then we again loop through the array and check the count of contender. If count > size/2. That is out answer.
+
+Since we iterate the array twice, once to find the contender and next to check the count of contender, The time complexity is O(2*N) or O(N).
+
+// This function just loops through the array and finds the final count of msf
+void final (vector<int> nums, int msf)  
+{
+    int count = 0 ;
+    for ( int ele: nums )
+    {
+        if ( ele == msf )
+            count++ ;
+    }
+    if ( count > nums.size() / 2 )
+        cout<<msf<<endl;
+}
+
+// This is the real deal. How count and msf changes is really important. Go through the code again and again for clearity. Watch video by TechDose on youtube.
+
+int FindMajority ()
+{
+    // This algo will only give us the contender of finding the majority element if any
+    vector<int> nums = {1,2,2,3,3,3} ;
+    int count = 1 ;
+    int msf = nums[0] ;
+    for ( int i= 1 ; i <nums.size() ; i++ )
+    {
+        if (msf != nums[i])
+        {
+            count-- ;
+            if (count == 0)
+            {
+                msf = nums[i] ;
+                count= 1;
+            }
+        }
+        else 
+            count++ ;
+    }
+    // Now we know out Maximum So Far contender. This can be in the solution or not.
+    final (nums, msf) ;
+}
+_____________________________________________________________________________
+21. 
